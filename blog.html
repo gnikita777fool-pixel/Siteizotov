@@ -1,16 +1,358 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Блог</title>
+  <style>
+    /* ===== Системные переменные ===== */
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #f72585;
+      --light-bg: #f8f9fa;
+      --dark-bg: #121212;
+      --light-text: #212529;
+      --dark-text: #f8f9fa;
+      --card-bg-light: #ffffff;
+      --card-bg-dark: #1e1e1e;
+      --border-light: #e9ecef;
+      --border-dark: #333333;
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-dark: 0 4px 12px rgba(0,0,0,0.2);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: var(--light-bg);
+      color: var(--light-text);
+      transition: var(--transition);
+    }
+
+    body[data-theme="dark"] {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header & Navigation */
+    header {
+      background-color: var(--card-bg-light);
+      box-shadow: var(--shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    body[data-theme="dark"] header {
+      background-color: var(--card-bg-dark);
+      box-shadow: var(--shadow-dark);
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--light-text);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    body[data-theme="dark"] nav a {
+      color: var(--dark-text);
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--light-text);
+    }
+
+    body[data-theme="dark"] .mobile-toggle {
+      color: var(--dark-text);
+    }
+
+    /* Main Content */
+    main {
+      padding: 2rem 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+      color: var(--light-text);
+      opacity: 0.8;
+    }
+
+    body[data-theme="dark"] .section-description {
+      color: var(--dark-text);
+    }
+
+    /* News Grid */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .news-card {
+      background: var(--card-bg-light);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+    }
+
+    body[data-theme="dark"] .news-card {
+      background: var(--card-bg-dark);
+      box-shadow: var(--shadow-dark);
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    body[data-theme="dark"] .news-card:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .card-tag {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: var(--light-text);
+    }
+
+    body[data-theme="dark"] .card-title {
+      color: var(--dark-text);
+    }
+
+    .card-excerpt {
+      color: var(--light-text);
+      opacity: 0.7;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    body[data-theme="dark"] .card-excerpt {
+      color: var(--dark-text);
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--light-text);
+      opacity: 0.6;
+    }
+
+    body[data-theme="dark"] .card-meta {
+      color: var(--dark-text);
+    }
+
+    .theme-toggle {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-wrap: wrap;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--light-bg);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+      }
+
+      body[data-theme="dark"] nav ul {
+        background: var(--dark-bg);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .section {
+        padding: 50px 0;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1 class="section-title">Блог</h1>
-<p>Здесь будут публиковаться статьи, обновления и разборы тем.</p>
-<div class="news-grid">
-  <!-- можно скопировать карточки из index.html -->
-</div>
+  <header>
+    <div class="container header-container">
+      <a href="#" class="logo">TechBlog</a>
+      <button class="mobile-toggle" id="mobileToggle">☰</button>
+      <nav>
+        <ul id="navMenu">
+          <li><a href="#">Главная</a></li>
+          <li><a href="#">Блог</a></li>
+          <li><a href="#">Категории</a></li>
+          <li><a href="#">О нас</a></li>
+          <li><a href="#">Контакты</a></li>
+          <li><button class="theme-toggle" id="themeToggle">🌙 Темная тема</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="section-title">Блог</h1>
+    <p class="section-description">Здесь будут публиковаться статьи, обновления и разборы тем.</p>
+    
+    <div class="news-grid">
+      
+  <script>
+    // Mobile navigation toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    mobileToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      body.setAttribute('data-theme', newTheme);
+      
+      if (newTheme === 'dark') {
+        themeToggle.textContent = '☀️ Светлая тема';
+      } else {
+        themeToggle.textContent = '🌙 Темная тема';
+      }
+    });
+  </script>
 </body>
 </html>
+
